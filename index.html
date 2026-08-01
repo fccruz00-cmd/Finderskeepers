@@ -7,19 +7,21 @@
 <meta name="description" content="Ache os objetos escondidos na imagem: clique em cada um antes que a lista acabe.">
 <title>Ache os Objetos</title>
 <style>
+/* ==========================================================================
+   Pele de pixel art. Os sprites vêm embutidos como data URI (nenhum arquivo
+   externo, nada de rede). Painéis e botões são 9-slice via border-image;
+   os ícones saem de um atlas de uma linha só, posicionado por índice.
+   Paleta copiada pixel a pixel do próprio pacote.
+   ========================================================================== */
 :root{
-  --bg:#0b1016;
-  --card:#141d29;
-  --card-2:#101823;
-  --line:#25344a;
-  --ink:#e9f0f9;
-  --muted:#93a6c0;
-  --gold:#f2b544;
-  --gold-dim:rgba(242,181,68,.14);
-  --green:#3ecf8e;
-  --green-dim:rgba(62,207,142,.14);
-  --red:#ff6b6b;
-  --r:16px;
+  --escuro:#3a3a50; --btn:#6b5052; --btn-borda:#9c786b;
+  --tan:#c3ac90; --tan-claro:#d0be9c; --tan-medio:#b18a74;
+  --ouro:#daa463; --ouro-esc:#a85f46;
+  --verde:#64b63b; --verde-claro:#b8d040; --verde-esc:#568d61;
+  --tinta:#463225; --fundo:#1d1b29;
+  --painel:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAdCAYAAAC5UQwxAAABVklEQVR42u2XsUrDQByHv6SBoKQIHc6lUyCjSNZq1w6ZxLngG/gCzg4OLj6FY+euwax5AEumDnpgIaQUQmnqoEkvWXMVhPymu/8d9x3HwX1n0MhodLNHY6JoZqh9QwU9355oA60+11X78a1XgY0S9nC1w7sU2oBfH5savIQar3eTfV/YDM6daleZzLVA+8IGqNbOZI4Vpg7TC7sqhKlDLHtagH5qMj47HG2YOlixLAgUGIAvTG1HG6YOgdiSyZxY9rDUwVgW+MJkMnIZuMN2lyZZMo8SYlkQeIe61ZyoAwYwcIdMAKIE2FV1kyMnlkWtf3RgMx2wA3bADtgB/yuwdBhfmMyjhFWybG9tvw9w0x4sVXjGrAlTh6fZAli0dxphEnjbmpRZ5Q4ymdMXNoHYMr12tLmpCvOFefDSe29TU7u2aarmy/vpj5eq5l1CdaeE1VT/r/4W37BAlNgeYmVzAAAAAElFTkSuQmCC); --moldura:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAYAAACGVs+MAAACNUlEQVR42u2XwYrTUBSGv2ZiO4bWYjtURZ3KQJZFuhIqXQkuCkLoyoUPMFDopszKJ3DRzTzIUBjoQpdCV4NB6i4ykFGxDU2lpKRNiq2LNLGdGVcmU8H5N/fccxf/4Zz/nntujCVqSnUBoBpzOp1WjAhQU6oL1ZgDBByi7zzY3wXg+6c+DZRF2OTFnMDB/i7uwMLs2TRQFsWcgKgac+qyjX5yxr1Ht3GnDgDN6s1QA2gcTdBPzohvJ3CnDnXZ5lCTEAHyhSx612Q8mmEZDs1qluxdKdQAmlXQuyapnMeRL2RBm3gBDPtjAG49eYZ13EbvmuhdMzTyVC4R2KscIBFbFcZVo5gTiAGUSsqiLtvBwftRMhLCcnoc2IeaRKfTiom+I1/w6q59NGAEz0t7AGT2Hvw18fD0K287p+scmncm+qkAiO+kSKZ/rNcvkwwhgN92fCcFGMFe8I2wVf8nuANrbS+wYYh++zV7NllgPJoBN64sAOGiBqIl9zTAtQb+sQD8Vnw+PVFhVWdBBsye14q9WxCtCOPbic2U4DKhB9fQP4z6GgLB0LOmAb8EUcLs2bgDa/MluJCB/6YPXFbm604onh9K/ef4Teuz5/DXEAbQdY4takp1IarGnGJOYNgf404dLMNBNbZ4/fQnmTvhDaeNowmVFQ6QUI25N5BU5BltzWtAqiFRl23kxw9DTXVdNmlryeW7I63/jCzDoZx2uP+iQvm4DcCHd18iGctfvqrwbckBbP5j8gsfgfshL09MNwAAAABJRU5ErkJggg==);
+  --btn-img:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAA1+Nx+AAAAoElEQVR42mNkgILsgKD/DAwMDOdf/WOgBjh2bAMjAwMDAyPMcDcrJQYhJRmqGP7u3hOGzg13GI4d28DICDP89bvvDNQEokKcDJ0b7jCwMDAwwA0/f+M5VQw31JCEm8kEE6SW4ehmMTHQGDBRK9XgtIDmPhi1gGgLDDUkqWYoslmMDAwMDFZWAf+T7KSp6vJ5h55CigqYgJVVwH9qWgAr7AC+zjU0W+6PVgAAAABJRU5ErkJggg==); --btn-on:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAA1+Nx+AAAAoUlEQVR42mNkgILsgKD/DAwMDOdf/WOgBjh2bAMjAwMDAyPMcDcrJQYhJRmqGP7u3hOGzg13GI4d28DICDP89bvvDNQEokKcDJ0b7jCwMDAwwA1XN1GliuE3z9yGm8kEE6SW4ehmMTHQGDBRK9XgtIDmPhi1gGgLbp65TTVDkc1iZGBgYLCyCvifZCdNVZfPO/QUUlTABKysAv5T0wJYYQcAQ/U1NMRS1ikAAAAASUVORK5CYII=);
+  --atlas:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAQCAYAAADeWHeIAAADBklEQVR42u1Zv4ujQBR+CTaBpBFyEO4gICxrK1hZWFpYhatSpDqwOvD/2DZt4CoLy1QpLC2shLQWiyDkONgFmwTSba64nWEcZ3QmWbJ4+FWJ8ZvnvPe9HxMH8I6fi+8XoLB/eQMekmQ7IL/3/G7yB4jsWBqo2jdoQpkf8Oen7TNepOd3lz9A5NfyDDKYqiN42j6D8WUIPb+7fAUAMHmf/REiG/qsYrDnd5ev4H4hSEb3Gvqsdu1/4TuWBnNTr/x+LE8QBvFd7C9XNkzU8V3sD2XKhmNp4Plu4z2e7zLv4V1vs+dYGtwTnu/i4B/LExzLEwAATNQxLFe21Dqsz20gg1+kGRRpJmXf811wLA2WKxuWKxv70LG0mmikBLBc2bWsYAE5jHYA6UxRzE1dyOZHgRRbkWYQBjGEQVwRgYggeQkgAhT8zXoHUZJDlOTYd+QQx7O7We/wOhN1jAfD1/LMrBzK/uUNDF1sQ0WaQZTktaMGyQ+DGCsV8ZADUQlr4rNUSl6jS50Iv6lUknwkNnqfYRCDoc/AdIx/9xC/0fabAk0GiMcv0qzS31HylPmh5nuaL5tglRmA7H2kA5qCz0MYxOBYGkxUHR8/RLlTdVTJ+mN5gkfzoXaM4cF0DCkB0KD3yQqaTOaLiIAEbbsp+Cy/o+SjxTBVR2Dos9r+Fdq49152jfKMHZ9Ge6khg878uamDZ+rCjrwFRZpxz8NtAqKfD+2DHAqbsmyz3jH7NMlhVcGmdiqTPOT66DnQnnlrKKxNeL6LM+lYnqSDT5d8siW0iSBKclxiUQBknEbybx0GyVlENIBkFvKCIxvMa4CqMOr9PAybMgENQjJg9ftbNvJZ2Kx3lcG1SDPhChYGcaXalPnhKh94vit18mC180fzoXEuUkTL4a2qvcYB6Aj0WUDZfI0vyJIbXVmRRCb/puAj8aJWzqoECjk9y/yTxLr20Xye4+5lnyfce9nnJU0bv60NkvwBAIBlLS4/7K9SKvsV/8YvI3p+d/n4laJlLS4yC9CvI3t+N/l/AT2OQM/+50lfAAAAAElFTkSuQmCC); --relogio:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAABG0lEQVR42l2Rv0sCcRjGP18TagiK09ouGpL7Hw5xy7gmpwOJgnCIaBPabXR3zcFodxMco25JAoeQ6xKqIzA7z5Lbvw1xX857lvfh5Xl/PoIEyuUTCRBFC5VznK6IeTYmdrUuj05tAIKvebKHjAuysfDgcJ/Bw5A0audnqkAAXN/05NvrB1apSMHQ8Vxfxd7dPbt7O9SOLZGxq3UZTiIlBGg0mwAUDB2rVCScRJhmRWYAFlGohGkUDJ13/wWATJz0XH9JdHHZYBaEeK7P9Hv2/42fWQAYS51v2y3Fc3lN8ZXxeHi1tqo1Pqe/aOub5PIbeK6vYqvdwR094zhdkQXo9zsCkPN5oEYCbG/leBo8KmNEck/TrMj0gUkH/wB5L3OIp4t6hwAAAABJRU5ErkJggg==);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -27,120 +29,173 @@ html,body{margin:0;padding:0}
 body{
   min-height:100dvh;
   background:
-    radial-gradient(1100px 620px at 12% -8%, #1b2a3f 0%, transparent 60%),
-    radial-gradient(900px 520px at 92% 4%, #2a2033 0%, transparent 58%),
-    var(--bg);
+    repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 2px, transparent 2px 4px),
+    radial-gradient(880px 560px at 50% -5%, #2c2743 0%, transparent 68%),
+    var(--fundo);
   background-attachment:fixed;
-  color:var(--ink);
-  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-  padding:clamp(12px,3vw,32px) clamp(12px,3vw,20px) 48px;
+  color:var(--tan);
+  font:16px/1.55 "Trebuchet MS", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding:clamp(12px,3vw,30px) clamp(10px,3vw,18px) 40px;
   display:flex;justify-content:center;
 }
 .wrap{width:100%;max-width:900px}
 
-h1{font-size:clamp(1.55rem,5.5vw,2.2rem);line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}
-h2{font-size:1.1rem;margin:0 0 10px}
-p{margin:0 0 14px}
-.sub{color:var(--muted);margin:0 0 24px}
-.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
-
-.card{
-  background:linear-gradient(180deg,var(--card),var(--card-2));
-  border:1px solid var(--line);border-radius:var(--r);
-  padding:clamp(16px,4vw,26px);
-  box-shadow:0 18px 50px -20px rgba(0,0,0,.85);
+h1{
+  font-size:clamp(1.3rem,4.4vw,1.85rem);line-height:1.2;margin:0 0 10px;
+  text-transform:uppercase;letter-spacing:.04em;color:var(--tan-claro);
+  text-shadow:0 3px 0 var(--escuro);
 }
-.tela{display:none;animation:sobe .34s cubic-bezier(.2,.7,.3,1) both}
-.tela.ativa{display:block}
-@keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+p{margin:0 0 12px}
+.eyebrow{
+  font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ouro);margin:0 0 8px;
+}
+.sub{color:var(--tan-medio);margin:0 0 20px}
 
-label{display:block;font-size:.83rem;font-weight:600;color:var(--muted);margin:0 0 7px}
+/* ---------- painel 9-slice ---------- */
+.painel{
+  max-width:560px;
+  border-style:solid;border-width:21px 18px 18px;
+  border-image:var(--painel) 7 6 6 6 fill / 21px 18px 18px 18px / 0 stretch;
+  image-rendering:pixelated;
+  background:var(--tan);background-clip:padding-box;
+  color:var(--tinta);padding:2px 8px 10px;
+}
+.painel p{color:#5c4535}
+.painel .eyebrow{color:var(--ouro-esc)}
+
+/* ---------- formulário ---------- */
+label{display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.09em;color:#6f5340;margin:0 0 7px}
 input[type=text]{
-  width:100%;padding:13px 15px;font-size:1.05rem;font-family:inherit;color:var(--ink);
-  background:#0c141e;border:1px solid var(--line);border-radius:12px;outline:none;
-  transition:border-color .16s,box-shadow .16s;
+  width:100%;padding:11px 12px;font:700 1rem inherit;color:var(--tan-claro);
+  background:var(--btn);border:0;outline:none;
+  box-shadow:0 0 0 3px var(--escuro);
 }
-input[type=text]::placeholder{color:#5d708a}
-input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+input[type=text]::placeholder{color:#9c8579;font-weight:400}
+input[type=text]:focus{box-shadow:0 0 0 3px var(--ouro)}
 
+/* ---------- botões 9-slice ---------- */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:13px 20px;margin-top:14px;
-  font:600 1rem/1 inherit;color:#20170a;
-  background:linear-gradient(180deg,#f7c65f,#e9a52c);
-  border:0;border-radius:12px;cursor:pointer;transition:transform .12s,filter .16s;
+  min-width:170px;margin:16px auto 4px;padding:3px 18px 5px;
+  font:700 1rem/1.6 inherit;letter-spacing:.03em;color:var(--tan-claro);
+  text-shadow:0 2px 0 rgba(58,58,80,.55);
+  border-style:solid;border-width:12px 12px 6px;
+  border-image:var(--btn-img) 4 4 2 4 fill / 12px 12px 6px 12px / 0 stretch;
+  background:var(--btn);background-clip:padding-box;
+  image-rendering:pixelated;cursor:pointer;
 }
-.btn:hover{filter:brightness(1.07)}
-.btn:active{transform:scale(.985)}
-.btn:disabled{opacity:.4;cursor:default;filter:none;transform:none}
-.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
-.btn.ghost:hover{color:var(--ink);border-color:#3a4d6b}
-.btn.sm{width:auto;padding:9px 15px;font-size:.86rem;margin-top:0}
-.linha{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.linha .btn{margin-top:0;flex:1 1 auto}
+.btn:hover,.btn:focus-visible{
+  border-image-source:var(--btn-on);
+  background:var(--tan);color:var(--tinta);text-shadow:none;
+}
+.btn:active{transform:translateY(2px)}
+.btn.sm{min-width:0;font-size:.85rem;padding:2px 14px 4px;margin:0}
+.painel .btn{display:flex}
+.linha{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;justify-content:center}
 
 /* ---------- HUD ---------- */
-.hud{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-.hud-item{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.hud-item b{color:var(--ink);font-weight:600}
-.barra{height:6px;background:#0c141e;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
-.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e9a52c,#f7d98a);transition:width .4s cubic-bezier(.2,.7,.3,1)}
-
-/* ---------- palco ---------- */
-.palco{
-  position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;
-  background:#000;line-height:0;touch-action:none;
+.hud{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  flex-wrap:wrap;margin-bottom:9px;font-size:.85rem;font-weight:700;
 }
-#cena{display:block;width:100%;aspect-ratio:1000/700;cursor:crosshair;user-select:none;-webkit-user-select:none}
+.hud b{color:var(--tan-claro)}
+.hud .ico-relogio{
+  display:inline-block;width:22px;height:22px;vertical-align:-6px;margin-right:3px;
+  background:var(--relogio) no-repeat center/contain;image-rendering:pixelated;
+}
+.barra{
+  height:16px;background:var(--btn);padding:3px;margin:0 3px 14px;
+  box-shadow:0 0 0 3px var(--escuro);
+}
+.barra i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(180deg,var(--verde-claro) 0 45%,var(--verde) 45% 100%);
+  transition:width .4s steps(14);
+}
+
+/* ---------- palco com a moldura do pacote ---------- */
+.palco{
+  position:relative;line-height:0;touch-action:none;
+  border-style:solid;border-width:24px 21px 15px;
+  border-image:var(--moldura) 8 7 5 8 fill / 24px 21px 15px 24px / 0 repeat;
+  image-rendering:pixelated;
+}
+#cena{
+  display:block;width:100%;aspect-ratio:1000/700;cursor:crosshair;
+  image-rendering:auto;user-select:none;-webkit-user-select:none;
+}
 #cena.arrastando{cursor:grabbing}
 
-.zoom{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px;line-height:1}
+/* ---------- botões de ícone (atlas) ---------- */
+.zoom{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;gap:5px;line-height:1}
 .zoom button{
-  width:38px;height:38px;font:600 1.15rem/1 inherit;color:var(--ink);
-  background:rgba(12,20,30,.82);border:1px solid var(--line);border-radius:10px;cursor:pointer;
-  backdrop-filter:blur(6px);
+  width:48px;height:48px;padding:0;border:0;cursor:pointer;
+  background:var(--atlas) no-repeat;background-size:384px auto;
+  image-rendering:pixelated;
 }
-.zoom button:hover{border-color:var(--gold);color:var(--gold)}
+#btn-mais{background-position:-96px 0}
+#btn-menos{background-position:-144px 0}
+#btn-reset{background-position:-240px 0}
+.zoom button:hover{filter:brightness(1.22)}
+.zoom button:active{transform:translateY(2px)}
 
-/* marcadores dentro do SVG */
-.alvo.achado .arte{opacity:.35}
-.anel-achado{fill:none;stroke:var(--green);stroke-width:4;animation:pop .5s cubic-bezier(.2,.8,.3,1) both}
-@keyframes pop{from{r:4;opacity:0}60%{opacity:1}to{r:30;opacity:1}}
-.pulso{fill:none;stroke:var(--gold);stroke-width:5;animation:pulso 1.4s ease-out 2 both}
-@keyframes pulso{from{r:6;opacity:1}to{r:52;opacity:0}}
-.erro-marca{fill:none;stroke:var(--red);stroke-width:4;animation:some .55s ease-out both}
-@keyframes some{from{r:4;opacity:.9}to{r:34;opacity:0}}
-
-/* ---------- lista ---------- */
+/* ---------- lista de objetos ---------- */
 .lista{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .chip{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:8px 13px;font-size:.88rem;font-weight:500;
-  background:#0c141e;border:1px solid var(--line);border-radius:99px;color:var(--ink);
-  transition:.2s;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 11px;font-size:.84rem;font-weight:700;
+  background:var(--btn);color:var(--tan-claro);
+  box-shadow:0 0 0 3px var(--escuro);
 }
-.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none}
-.chip.ok{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--green);background:var(--green-dim);border-color:transparent}
-.chip.ok::before{content:"✓";width:auto;height:auto;background:none;color:var(--green);font-weight:700;text-decoration:none}
-.chip.piscar{animation:destaca .6s ease-out}
-@keyframes destaca{0%{transform:scale(1)}35%{transform:scale(1.12)}100%{transform:scale(1)}}
+/* o ✓/• fica fora do <span class="rot">, senão o risco do item achado
+   passa por cima do próprio marcador */
+.chip::before{content:"\2022";color:var(--ouro);font-size:1.1em;line-height:0}
+.chip .rot{text-decoration:inherit}
+.chip.ok{background:var(--verde-esc);color:#eaf6dc}
+.chip.ok .rot{text-decoration:line-through}
+.chip.ok::before{content:"\2713";color:var(--verde-claro);font-size:1.05em;line-height:1}
+.chip.piscar{animation:destaca .5s steps(3)}
+@keyframes destaca{0%{transform:none}50%{transform:translateY(-4px)}100%{transform:none}}
 
-.aviso{margin:12px 0 0;padding:11px 15px;border-radius:12px;font-size:.9rem;font-weight:500;background:var(--gold-dim);color:#f4d79b}
-.aviso:empty{display:none;padding:0;margin:0}
+.aviso{
+  margin:12px 0 0;padding:9px 13px;font-size:.85rem;font-weight:700;
+  background:var(--escuro);color:var(--ouro);box-shadow:0 0 0 3px var(--btn);
+}
+.aviso:empty{display:none;padding:0;margin:0;box-shadow:none}
 
 /* ---------- placar ---------- */
-.placar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 4px}
-.placar div{background:#0c141e;border:1px solid var(--line);border-radius:12px;padding:14px 8px;text-align:center}
-.placar strong{display:block;font-size:1.4rem;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
-.placar span{font-size:.7rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.placar{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0 6px}
+.placar div{background:var(--btn);box-shadow:0 0 0 3px var(--escuro);padding:11px 5px;text-align:center}
+.placar strong{
+  display:block;font-size:1.3rem;color:var(--tan-claro);
+  text-shadow:0 2px 0 var(--escuro);font-variant-numeric:tabular-nums;
+}
+.placar span{font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:var(--tan-medio)}
+
+.creditos{margin:24px 0 0;font-size:.72rem;line-height:1.5;color:#6d6280;text-align:center}
+.creditos b{color:var(--tan-medio)}
+
+/* ---------- telas e marcadores da cena ---------- */
+.tela{display:none;animation:entra .3s steps(5) both}
+.tela.ativa{display:block}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.alvo.achado .arte{opacity:.35}
+.anel-achado{fill:none;stroke:#64b63b;stroke-width:5;animation:pop .4s steps(5) both}
+@keyframes pop{from{r:4;opacity:0}60%{opacity:1}to{r:30;opacity:1}}
+.pulso{fill:none;stroke:#daa463;stroke-width:6;animation:pulso 1.4s steps(10) 2 both}
+@keyframes pulso{from{r:6;opacity:1}to{r:52;opacity:0}}
+.erro-marca{fill:none;stroke:#c1443f;stroke-width:5;animation:some .5s steps(6) both}
+@keyframes some{from{r:4;opacity:.95}to{r:34;opacity:0}}
 
 #confete{position:fixed;inset:0;pointer-events:none;z-index:9}
 
-@media (max-width:420px){
-  .placar strong{font-size:1.15rem}
-  .placar span{font-size:.62rem;letter-spacing:.02em}
-  .chip{padding:7px 11px;font-size:.82rem}
+@media (max-width:430px){
+  .placar strong{font-size:1.05rem}
+  .placar span{font-size:.54rem;letter-spacing:.02em}
+  .chip{padding:5px 9px;font-size:.78rem}
+  .palco{border-width:16px 14px 10px;border-image-width:16px 14px 10px 16px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -153,9 +208,9 @@ input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-
   <!-- ============ INÍCIO ============ -->
   <section class="tela ativa" id="tela-inicio">
     <p class="eyebrow">Ache os objetos</p>
-    <h1>Tem dez coisas escondidas nessa mesa.</h1>
-    <p class="sub">A lista fica embaixo da imagem. Achou, clica em cima. Dá para dar zoom com a roda do mouse, com dois dedos, ou pelos botões — e arrastar para andar pela cena.</p>
-    <div class="card">
+    <h1>Tem dez coisas<br>escondidas nessa mesa.</h1>
+    <p class="sub">A lista fica embaixo da imagem. Achou, clica em cima. Dá para dar zoom com a roda do mouse, com dois dedos ou pelos botões — e arrastar para andar pela cena.</p>
+    <div class="painel">
       <label for="jogador">Quem está jogando?</label>
       <input type="text" id="jogador" placeholder="seu nome (opcional)" autocomplete="off" maxlength="40">
       <button class="btn" id="btn-comecar">Começar</button>
@@ -165,8 +220,8 @@ input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-
   <!-- ============ JOGO ============ -->
   <section class="tela" id="tela-jogo">
     <div class="hud">
-      <span class="hud-item">Achou <b id="hud-achados">0</b> de <b id="hud-total">10</b></span>
-      <span class="hud-item">⏱ <b id="hud-tempo">00:00</b> · <b id="hud-pontos">0</b> pts</span>
+      <span>Achou <b id="hud-achados">0</b> de <b id="hud-total">10</b></span>
+      <span><i class="ico-relogio" aria-hidden="true"></i><b id="hud-tempo">00:00</b> · <b id="hud-pontos">0</b> pts</span>
     </div>
     <div class="barra"><i id="barra"></i></div>
 
@@ -515,9 +570,9 @@ input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-
       </svg>
 
       <div class="zoom">
-        <button type="button" id="btn-mais" aria-label="Aproximar">+</button>
-        <button type="button" id="btn-menos" aria-label="Afastar">−</button>
-        <button type="button" id="btn-reset" aria-label="Ver a mesa inteira" style="font-size:.95rem">⤢</button>
+        <button type="button" id="btn-mais" aria-label="Aproximar"></button>
+        <button type="button" id="btn-menos" aria-label="Afastar"></button>
+        <button type="button" id="btn-reset" aria-label="Ver a mesa inteira"></button>
       </div>
     </div>
 
@@ -525,8 +580,8 @@ input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-
     <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
 
     <div class="linha">
-      <button class="btn ghost sm" id="btn-dica">Dica (−50 pts)</button>
-      <button class="btn ghost sm" id="btn-desistir">Recomeçar</button>
+      <button class="btn sm" id="btn-dica">Dica (−50 pts)</button>
+      <button class="btn sm" id="btn-desistir">Recomeçar</button>
     </div>
   </section>
 
@@ -535,7 +590,7 @@ input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-
     <p class="eyebrow">Mesa limpa</p>
     <h1>Achou tudo.</h1>
     <p class="sub" id="fim-nome"></p>
-    <div class="card">
+    <div class="painel">
       <p>Dez objetos, nenhum sobrando. Os cliques errados custaram caro, mas você chegou lá.</p>
       <div class="placar">
         <div><strong id="fim-pontos">0</strong><span>pontos</span></div>
@@ -545,6 +600,8 @@ input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-
       <button class="btn" id="btn-denovo">Jogar de novo</button>
     </div>
   </section>
+
+  <p class="creditos">Interface em pixel art do pacote <b>Modern User Interface</b>.<br>Cena e código do jogo à parte.</p>
 
 </div>
 
@@ -703,7 +760,7 @@ $("#btn-reset").addEventListener("click", () => { vb = { ...VB0 }; aplicarVB(); 
 /* ---------------- o jogo ---------------- */
 function montarLista(){
   $("#lista").innerHTML = ALVOS
-    .map(a => '<span class="chip" id="chip-' + a.id + '">' + a.nome + '</span>')
+    .map(a => '<span class="chip" id="chip-' + a.id + '"><span class="rot">' + a.nome + '</span></span>')
     .join("");
   $("#hud-total").textContent = ALVOS.length;
 }
