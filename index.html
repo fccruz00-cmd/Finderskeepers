@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Scavenger hunt de enigmas: resolva as pistas, cumpra as missões e chegue ao final.">
+<title>Scavenger Hunt</title>
+<style>
+:root{
+  --bg:#0b1016;
+  --card:#141d29;
+  --card-2:#101823;
+  --line:#25344a;
+  --ink:#e9f0f9;
+  --muted:#93a6c0;
+  --gold:#f2b544;
+  --gold-dim:rgba(242,181,68,.14);
+  --green:#3ecf8e;
+  --green-dim:rgba(62,207,142,.13);
+  --red:#ff6b6b;
+  --red-dim:rgba(255,107,107,.13);
+  --r:16px;
+  --shadow:0 18px 50px -20px rgba(0,0,0,.85);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+[hidden]{display:none!important}
+body{
+  min-height:100dvh;
+  background:
+    radial-gradient(1100px 620px at 12% -8%, #1b2a3f 0%, transparent 60%),
+    radial-gradient(900px 520px at 92% 4%, #2a2033 0%, transparent 58%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--ink);
+  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:clamp(14px,4vw,40px) clamp(14px,4vw,24px) 56px;
+  display:flex;
+  justify-content:center;
+}
+.wrap{width:100%;max-width:660px}
+
+/* ---------- tipografia ---------- */
+h1{
+  font-size:clamp(1.6rem,6vw,2.3rem);
+  line-height:1.15;
+  margin:0 0 10px;
+  letter-spacing:-.02em;
+  font-weight:700;
+}
+h2{font-size:1.12rem;margin:0 0 10px;letter-spacing:-.01em}
+p{margin:0 0 14px}
+.sub{color:var(--muted);margin:0 0 26px}
+.eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 10px;
+}
+
+/* ---------- cartão ---------- */
+.card{
+  background:linear-gradient(180deg,var(--card) 0%,var(--card-2) 100%);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:clamp(18px,5vw,28px);
+  box-shadow:var(--shadow);
+}
+.card + .card{margin-top:16px}
+
+/* ---------- telas ---------- */
+.tela{display:none;animation:sobe .34s cubic-bezier(.2,.7,.3,1) both}
+.tela.ativa{display:block}
+@keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- formulário ---------- */
+label{display:block;font-size:.83rem;font-weight:600;color:var(--muted);margin:0 0 7px}
+input[type=text]{
+  width:100%;padding:14px 16px;font-size:1.05rem;font-family:inherit;color:var(--ink);
+  background:#0c141e;border:1px solid var(--line);border-radius:12px;outline:none;
+  transition:border-color .16s,box-shadow .16s;
+}
+input[type=text]::placeholder{color:#5d708a}
+input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px 20px;margin-top:14px;
+  font:600 1rem/1 inherit;color:#20170a;
+  background:linear-gradient(180deg,#f7c65f,#e9a52c);
+  border:0;border-radius:12px;cursor:pointer;
+  transition:transform .12s,filter .16s;
+}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.4;cursor:default;filter:none;transform:none}
+.btn.ghost{
+  background:transparent;color:var(--muted);border:1px solid var(--line);
+}
+.btn.ghost:hover{color:var(--ink);border-color:#3a4d6b}
+.btn.sm{width:auto;padding:9px 16px;font-size:.86rem;margin-top:0}
+.linha{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.linha .btn{margin-top:0;flex:1 1 auto}
+
+/* ---------- barra de progresso ---------- */
+.hud{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.hud-item{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.hud-item b{color:var(--ink);font-weight:600}
+.barra{height:6px;background:#0c141e;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e9a52c,#f7d98a);transition:width .45s cubic-bezier(.2,.7,.3,1)}
+
+/* ---------- enigma ---------- */
+.enigma{
+  font-size:clamp(1.12rem,4.2vw,1.34rem);line-height:1.55;font-weight:500;
+  margin:0 0 22px;padding:18px 20px;
+  background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;
+}
+.dica{
+  margin:14px 0 0;padding:13px 16px;font-size:.93rem;color:#f4d79b;
+  background:var(--gold-dim);border-radius:12px;
+  animation:sobe .3s both;
+}
+.dica b{color:var(--gold)}
+
+/* ---------- feedback ---------- */
+.aviso{margin:14px 0 0;padding:13px 16px;border-radius:12px;font-size:.93rem;font-weight:500}
+.aviso:empty{display:none;padding:0;margin:0}
+.aviso.erro{background:var(--red-dim);color:#ffb3b3}
+.treme{animation:treme .4s}
+@keyframes treme{
+  10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-7px)} 40%,60%{transform:translateX(7px)}
+}
+
+/* ---------- missão ---------- */
+.missao{
+  margin:0 0 20px;padding:18px 20px;
+  background:var(--green-dim);border-left:3px solid var(--green);border-radius:0 12px 12px 0;
+}
+.missao .eyebrow{color:var(--green)}
+.missao p{margin:0;font-size:1.04rem}
+
+/* ---------- placar final ---------- */
+.placar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 4px}
+.placar div{background:#0c141e;border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center}
+.placar strong{display:block;font-size:1.45rem;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+.placar span{font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- gabarito do organizador ---------- */
+.link{
+  display:inline-block;margin-top:22px;background:none;border:0;padding:0;cursor:pointer;
+  font:inherit;font-size:.86rem;color:var(--muted);text-decoration:underline;text-underline-offset:3px;
+}
+.link:hover{color:var(--gold)}
+#gabarito ol{margin:0;padding-left:22px}
+#gabarito li{margin-bottom:18px}
+#gabarito .g-enigma{font-style:italic;color:var(--ink)}
+#gabarito .g-meta{font-size:.88rem;color:var(--muted);margin-top:5px}
+#gabarito .g-meta b{color:var(--green);font-weight:600}
+
+/* ---------- confete ---------- */
+#confete{position:fixed;inset:0;pointer-events:none;z-index:9}
+
+@media (max-width:400px){
+  .placar{gap:7px}
+  .placar div{padding:12px 4px}
+  .placar strong{font-size:1.2rem}
+  .placar span{font-size:.65rem;letter-spacing:.03em}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---------- impressão do gabarito ---------- */
+@media print{
+  body{background:#fff;color:#000;padding:0;display:block}
+  .tela,.no-print{display:none!important}
+  #gabarito{display:block!important;border:0;box-shadow:none;padding:0;background:none;color:#000}
+  #gabarito .g-enigma,#gabarito .g-meta,#gabarito .g-meta b{color:#000}
+  #gabarito li{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<canvas id="confete" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+  <!-- ============ TELA: INÍCIO ============ -->
+  <section class="tela ativa" id="tela-inicio" aria-labelledby="t-inicio">
+    <p class="eyebrow">Scavenger hunt</p>
+    <h1 id="t-inicio">Dez enigmas.<br>Um objeto por vez.</h1>
+    <p class="sub">Cada enigma aponta para uma coisa que existe de verdade por aí. Ache, digite o nome e cumpra a missão para liberar o próximo. O relógio corre desde o primeiro.</p>
+
+    <div class="card">
+      <label for="jogador">Quem está jogando?</label>
+      <input type="text" id="jogador" placeholder="seu nome ou o nome do time" autocomplete="off" maxlength="40">
+      <button class="btn" id="btn-comecar">Começar</button>
+      <button class="btn ghost" id="btn-continuar" hidden>Continuar de onde parei</button>
+    </div>
+
+    <button class="link no-print" id="btn-gabarito">Sou quem organizou — ver todas as respostas</button>
+  </section>
+
+  <!-- ============ TELA: JOGO ============ -->
+  <section class="tela" id="tela-jogo" aria-labelledby="t-enigma">
+    <div class="hud">
+      <span class="hud-item">Pista <b id="hud-num">1</b> de <b id="hud-total">10</b></span>
+      <span class="hud-item">⏱ <b id="hud-tempo">00:00</b> · <b id="hud-pontos">0</b> pts</span>
+    </div>
+    <div class="barra"><i id="barra"></i></div>
+
+    <div class="card">
+      <p class="enigma" id="t-enigma">…</p>
+
+      <label for="resposta">O que é?</label>
+      <input type="text" id="resposta" placeholder="digite sua resposta" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="60">
+      <button class="btn" id="btn-responder">Verificar</button>
+
+      <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
+      <div id="caixa-dica"></div>
+
+      <div class="linha">
+        <button class="btn ghost sm" id="btn-dica">Pedir uma dica (−25 pts)</button>
+        <button class="btn ghost sm" id="btn-recomecar">Recomeçar tudo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TELA: MISSÃO ============ -->
+  <section class="tela" id="tela-missao" aria-labelledby="t-acertou">
+    <div class="card">
+      <p class="eyebrow" style="color:var(--green)">Acertou</p>
+      <h2 id="t-acertou">Resposta: <span id="missao-resposta">…</span></h2>
+      <div class="missao">
+        <p class="eyebrow">Antes da próxima pista</p>
+        <p id="missao-texto">…</p>
+      </div>
+      <button class="btn" id="btn-proxima">Missão cumprida — próxima pista</button>
+    </div>
+  </section>
+
+  <!-- ============ TELA: FIM ============ -->
+  <section class="tela" id="tela-fim" aria-labelledby="t-fim">
+    <p class="eyebrow">Fim da linha</p>
+    <h1 id="t-fim">Você chegou.</h1>
+    <p class="sub" id="fim-nome"></p>
+
+    <div class="card">
+      <p id="fim-texto"></p>
+      <div class="placar">
+        <div><strong id="fim-pontos">0</strong><span>pontos</span></div>
+        <div><strong id="fim-tempo">00:00</strong><span>tempo</span></div>
+        <div><strong id="fim-erros">0</strong><span>erros</span></div>
+      </div>
+      <button class="btn" id="btn-denovo">Jogar de novo</button>
+    </div>
+  </section>
+
+  <!-- ============ GABARITO (organizador / impressão) ============ -->
+  <section class="card" id="gabarito" hidden aria-label="Gabarito">
+    <h2>Gabarito</h2>
+    <p class="sub" style="margin-bottom:20px">Lista completa de enigmas, respostas aceitas e missões. Dá para imprimir e levar junto.</p>
+    <ol id="gabarito-lista"></ol>
+    <div class="linha no-print">
+      <button class="btn ghost sm" id="btn-imprimir">Imprimir</button>
+      <button class="btn ghost sm" id="btn-fechar-gabarito">Fechar</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================================
+   CONTEÚDO — é só aqui que você mexe para trocar a caça toda.
+
+   enigma    : o texto que aparece para quem joga
+   respostas : todas as formas aceitas (acento, maiúscula e pontuação são
+               ignorados na comparação — "Relógio", "relogio" e "RELOGIO"
+               dão no mesmo). Coloque também os sinônimos e o plural.
+   dica      : mostrada só se a pessoa pedir, custa 25 pontos
+   missao    : o que fazer ao achar o objeto, antes de liberar a próxima
+   ========================================================================= */
+const PISTAS = [
+  {
+    enigma:"Tenho muitos dentes e nunca mordi ninguém. Passo o dia inteiro na cabeça dos outros e sempre me acham no fundo da gaveta.",
+    respostas:["pente","pentes"],
+    dica:"Fica no banheiro e briga com nó de cabelo.",
+    missao:"Faça o penteado mais ridículo que conseguir e não desfaça até o fim do jogo."
+  },
+  {
+    enigma:"Tenho ponteiros mas não aponto nada, e mãos que não seguram coisa alguma. Ando o dia inteiro sem sair do lugar.",
+    respostas:["relógio","relogio de parede","relogio de pulso"],
+    dica:"Sem ele você não sabe se está atrasado.",
+    missao:"Fique parado olhando para ele por 30 segundos inteiros. Sem falar."
+  },
+  {
+    enigma:"Quem chega perto de mim vira dois. Não guardo nada e mesmo assim devolvo tudo.",
+    respostas:["espelho","espelhos"],
+    dica:"Ele copia você, mas troca sua esquerda pela direita.",
+    missao:"Se apresente para o seu reflexo em voz alta, com nome completo."
+  },
+  {
+    enigma:"Sou pequena, torta e cheia de dentes. Sem mim, um monte de porta por aí perde completamente o sentido.",
+    respostas:["chave","chaves","molho de chaves"],
+    dica:"Some sempre na hora errada e vive de molho.",
+    missao:"Tranque e destranque alguma coisa. Qualquer coisa."
+  },
+  {
+    enigma:"Tenho folhas e não sou árvore, tenho lombada e não sou bicho. Cada vez que me abrem, alguém viaja sem sair da cadeira.",
+    respostas:["livro","livros"],
+    dica:"Na estante, geralmente do lado de outro igual.",
+    missao:"Abra numa página aleatória e leia a primeira frase inteira em voz alta."
+  },
+  {
+    enigma:"Toda noite alguém me dá um soco e, mesmo assim, me abraça até de manhã.",
+    respostas:["travesseiro","travesseiros","almofada","almofadas"],
+    dica:"Sem ele o pescoço acorda te odiando.",
+    missao:"Deite, conte até dez e levante. Ninguém pode dormir de verdade aqui."
+  },
+  {
+    enigma:"Sou uma caixa fria que ronca baixinho num canto. Guardo o que sobrou do almoço e as ideias de quem me abre sem fome.",
+    respostas:["geladeira","geladeiras","frigorífico","refrigerador"],
+    dica:"Você já abriu ela hoje sem motivo nenhum.",
+    missao:"Ache o item mais antigo lá dentro e leia a validade em voz alta."
+  },
+  {
+    enigma:"Tenho cabelo duro, uma perna só, e danço pelo chão juntando tudo que ninguém quis.",
+    respostas:["vassoura","vassouras"],
+    dica:"Costuma morar atrás de uma porta, encostada.",
+    missao:"Dê três voltas com ela como se fosse um par de dança."
+  },
+  {
+    enigma:"A gente sempre sai em dupla, mas uma de nós vive desaparecendo dentro da máquina e nunca mais volta.",
+    respostas:["meia","meias","par de meias"],
+    dica:"Mistério doméstico não resolvido até hoje.",
+    missao:"Encontre uma sozinha, sem par. Se achar o par, melhor ainda."
+  },
+  {
+    enigma:"Quanto mais eu trabalho, menor eu fico. Nasço alta e inteira, e termino a noite derretida.",
+    respostas:["vela","velas"],
+    dica:"Aparece em bolo de aniversário e em queda de luz.",
+    missao:"Segure ela na mão. É o último objeto — a próxima tela é sua."
+  }
+];
+
+/* Texto da tela final. Troque pelo lugar onde o prêmio está escondido. */
+const FINAL = {
+  texto:"Dez objetos, dez missões, nenhuma pista sobrando. O que estava escondido está debaixo do lugar onde você senta para comer. Vai lá — é seu."
+};
+
+/* Regras de pontuação */
+const PONTOS_BASE = 100, CUSTO_ERRO = 10, CUSTO_DICA = 25, MINIMO = 10;
+const CHAVE = "scavenger-hunt-progresso";
+
+/* ========================= motor do jogo ========================= */
+const $ = s => document.querySelector(s);
+const telas = {
+  inicio:  $("#tela-inicio"),
+  jogo:    $("#tela-jogo"),
+  missao:  $("#tela-missao"),
+  fim:     $("#tela-fim")
+};
+let estado = null, cronometro = null;
+
+const limpar = t => t.toLowerCase()
+  .normalize("NFD").replace(/[\u0300-\u036f]/g,"")    // tira acento
+  .replace(/[^a-z0-9\s]/g," ")                        // tira pontuação
+  .replace(/\s+/g," ").trim();
+
+const mmss = ms => {
+  const s = Math.floor(ms/1000);
+  return String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0");
+};
+
+function novoEstado(nome){
+  return { nome, atual:0, pontos:0, erros:0, errosPista:0, dicaAberta:false, inicio:Date.now(), fim:null };
+}
+function salvar(){ try{ localStorage.setItem(CHAVE, JSON.stringify(estado)); }catch(e){} }
+function carregar(){
+  try{
+    const bruto = localStorage.getItem(CHAVE);
+    if(!bruto) return null;
+    const s = JSON.parse(bruto);
+    return (s && typeof s.atual === "number" && s.atual < PISTAS.length && !s.fim) ? s : null;
+  }catch(e){ return null; }
+}
+function apagar(){ try{ localStorage.removeItem(CHAVE); }catch(e){} }
+
+function mostrar(nome){
+  Object.values(telas).forEach(t => t.classList.remove("ativa"));
+  telas[nome].classList.add("ativa");
+  $("#gabarito").hidden = true;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function tick(){
+  if(!estado) return;
+  $("#hud-tempo").textContent = mmss(Date.now() - estado.inicio);
+}
+function ligarCronometro(){
+  clearInterval(cronometro);
+  tick();
+  cronometro = setInterval(tick, 1000);
+}
+
+function pintarPista(){
+  const p = PISTAS[estado.atual];
+  $("#hud-num").textContent = estado.atual + 1;
+  $("#hud-total").textContent = PISTAS.length;
+  $("#hud-pontos").textContent = estado.pontos;
+  $("#barra").style.width = (estado.atual / PISTAS.length * 100) + "%";
+  $("#t-enigma").textContent = p.enigma;
+  $("#aviso").textContent = ""; $("#aviso").className = "aviso";
+  $("#caixa-dica").innerHTML = "";
+  $("#btn-dica").disabled = false;
+  $("#btn-dica").textContent = "Pedir uma dica (−" + CUSTO_DICA + " pts nesta pista)";
+  const campo = $("#resposta");
+  campo.value = "";
+  if(estado.dicaAberta) abrirDica();
+  mostrar("jogo");
+  setTimeout(() => campo.focus({preventScroll:true}), 260);
+}
+
+/* A dica não tira pontos do total: ela encarece só a pista atual, na hora
+   de somar o acerto. Assim ela nunca sai de graça na primeira pista. */
+function abrirDica(){
+  if(!estado.dicaAberta){
+    estado.dicaAberta = true;
+    salvar();
+  }
+  $("#caixa-dica").innerHTML = '<p class="dica"><b>Dica:</b> ' + esc(PISTAS[estado.atual].dica) + '</p>';
+  $("#btn-dica").disabled = true;
+  $("#btn-dica").textContent = "Dica já usada (−" + CUSTO_DICA + " pts)";
+}
+
+function responder(){
+  const campo = $("#resposta");
+  const tentativa = limpar(campo.value);
+  if(!tentativa) return;
+
+  const p = PISTAS[estado.atual];
+  const acertou = p.respostas.some(r => limpar(r) === tentativa);
+
+  if(!acertou){
+    estado.erros++;
+    estado.errosPista++;
+    salvar();
+    const aviso = $("#aviso");
+    aviso.className = "aviso erro";
+    aviso.textContent = estado.errosPista >= 3
+      ? "Ainda não. Talvez seja hora de pedir a dica."
+      : "Não é isso. Lê o enigma de novo com calma.";
+    campo.classList.remove("treme");
+    void campo.offsetWidth;
+    campo.classList.add("treme");
+    campo.select();
+    return;
+  }
+
+  const custo = estado.errosPista * CUSTO_ERRO + (estado.dicaAberta ? CUSTO_DICA : 0);
+  estado.pontos += Math.max(MINIMO, PONTOS_BASE - custo);
+  estado.errosPista = 0;
+  estado.dicaAberta = false;
+  salvar();
+
+  $("#missao-resposta").textContent = p.respostas[0];
+  $("#missao-texto").textContent = p.missao;
+  mostrar("missao");
+}
+
+function proxima(){
+  estado.atual++;
+  salvar();
+  if(estado.atual >= PISTAS.length) return terminar();
+  pintarPista();
+}
+
+function terminar(){
+  clearInterval(cronometro);
+  estado.fim = Date.now();
+  const total = estado.fim - estado.inicio;
+  apagar();
+  $("#fim-nome").textContent = estado.nome ? estado.nome + ", fechou a lista inteira." : "Lista inteira, fechada.";
+  $("#fim-texto").textContent = FINAL.texto;
+  $("#fim-pontos").textContent = estado.pontos;
+  $("#fim-tempo").textContent = mmss(total);
+  $("#fim-erros").textContent = estado.erros;
+  mostrar("fim");
+  confete();
+}
+
+/* ========================= gabarito ========================= */
+function montarGabarito(){
+  const lista = $("#gabarito-lista");
+  if(lista.childElementCount) return;
+  lista.innerHTML = PISTAS.map(p =>
+    '<li><div class="g-enigma">' + esc(p.enigma) + '</div>' +
+    '<div class="g-meta">Resposta: <b>' + esc(p.respostas.join(" / ")) + '</b></div>' +
+    '<div class="g-meta">Dica: ' + esc(p.dica) + '</div>' +
+    '<div class="g-meta">Missão: ' + esc(p.missao) + '</div></li>'
+  ).join("");
+}
+const esc = t => String(t).replace(/[<>&"]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
+
+/* ========================= confete ========================= */
+function confete(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = $("#confete"), ctx = cv.getContext("2d");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
+  ctx.scale(dpr, dpr);
+
+  const cores = ["#f2b544","#f7d98a","#3ecf8e","#e9f0f9","#ff9f5a"];
+  const peças = Array.from({length:110}, () => ({
+    x: Math.random()*innerWidth,
+    y: -20 - Math.random()*innerHeight*.6,
+    l: 5 + Math.random()*7,
+    vy: 1.8 + Math.random()*2.6,
+    vx: -1 + Math.random()*2,
+    giro: Math.random()*Math.PI,
+    vg: -.1 + Math.random()*.2,
+    cor: cores[Math.floor(Math.random()*cores.length)]
+  }));
+
+  const fim = Date.now() + 4200;
+  (function anima(){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    peças.forEach(p => {
+      p.y += p.vy; p.x += p.vx; p.giro += p.vg;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.giro);
+      ctx.fillStyle = p.cor;
+      ctx.fillRect(-p.l/2, -p.l/4, p.l, p.l/2);
+      ctx.restore();
+    });
+    if(Date.now() < fim) requestAnimationFrame(anima);
+    else ctx.clearRect(0,0,innerWidth,innerHeight);
+  })();
+}
+
+/* ========================= ligações ========================= */
+$("#btn-comecar").addEventListener("click", () => {
+  estado = novoEstado($("#jogador").value.trim());
+  salvar();
+  ligarCronometro();
+  pintarPista();
+});
+$("#jogador").addEventListener("keydown", e => { if(e.key === "Enter") $("#btn-comecar").click(); });
+
+$("#btn-continuar").addEventListener("click", () => {
+  estado = carregar();
+  if(!estado) return;
+  ligarCronometro();
+  pintarPista();
+});
+
+$("#btn-responder").addEventListener("click", responder);
+$("#resposta").addEventListener("keydown", e => { if(e.key === "Enter") responder(); });
+$("#btn-dica").addEventListener("click", abrirDica);
+$("#btn-proxima").addEventListener("click", proxima);
+
+$("#btn-recomecar").addEventListener("click", () => {
+  if(!confirm("Apagar o progresso e voltar para a primeira pista?")) return;
+  clearInterval(cronometro);
+  apagar();
+  estado = null;
+  $("#btn-continuar").hidden = true;
+  mostrar("inicio");
+});
+$("#btn-denovo").addEventListener("click", () => {
+  estado = null;
+  $("#btn-continuar").hidden = true;
+  $("#jogador").value = "";
+  mostrar("inicio");
+});
+
+$("#btn-gabarito").addEventListener("click", () => {
+  montarGabarito();
+  const g = $("#gabarito");
+  g.hidden = !g.hidden;
+  if(!g.hidden) g.scrollIntoView({behavior:"smooth", block:"start"});
+});
+$("#btn-fechar-gabarito").addEventListener("click", () => {
+  $("#gabarito").hidden = true;
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+$("#btn-imprimir").addEventListener("click", () => window.print());
+
+/* retomar partida salva */
+if(carregar()) $("#btn-continuar").hidden = false;
+$("#hud-total").textContent = PISTAS.length;
+</script>
+</body>
+</html>
