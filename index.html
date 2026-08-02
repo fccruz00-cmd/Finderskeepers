@@ -129,7 +129,10 @@ input[type=text]:focus{box-shadow:0 0 0 3px var(--ouro)}
 #cena.arrastando{cursor:grabbing}
 
 /* ---------- botões de ícone (atlas) ---------- */
-.zoom{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;gap:5px;line-height:1}
+/* Fora da imagem, de propósito. Flutuando no canto, eles tapavam um pedaço
+   da cena que era impossível destapar: o arrasto para na borda, então o canto
+   inferior direito do cômodo sempre cai bem embaixo deles, em qualquer zoom. */
+.zoom{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;line-height:1}
 .zoom button{
   width:48px;height:48px;padding:0;border:0;cursor:pointer;
   background:var(--atlas) no-repeat;background-size:384px auto;
@@ -296,12 +299,12 @@ input[type=text]:focus{box-shadow:0 0 0 3px var(--ouro)}
         <g id="alvos"></g>
         <g id="marcadores"></g>
       </svg>
+    </div>
 
-      <div class="zoom">
-        <button type="button" id="btn-mais" aria-label="Aproximar"></button>
-        <button type="button" id="btn-menos" aria-label="Afastar"></button>
-        <button type="button" id="btn-reset" aria-label="Ver o cômodo inteiro"></button>
-      </div>
+    <div class="zoom">
+      <button type="button" id="btn-mais" aria-label="Aproximar"></button>
+      <button type="button" id="btn-menos" aria-label="Afastar"></button>
+      <button type="button" id="btn-reset" aria-label="Ver o cômodo inteiro"></button>
     </div>
 
     <div class="lista" id="lista"></div>
