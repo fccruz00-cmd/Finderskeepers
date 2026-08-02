@@ -1487,6 +1487,363 @@ h2.cap.selada span{color:#7d6f92}
 }
 .item button:disabled{background:#4b4152;color:#847a95;cursor:not-allowed}
 .item.casa-atual{box-shadow:0 0 0 3px var(--verde-claro)}
+
+/* ---------- menu de fases ---------- */
+.fases{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px;margin-top:4px}
+.fase{
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:5px 13px 8px;text-align:left;font:inherit;color:var(--tan-claro);cursor:pointer;
+  border-style:solid;border-width:12px 12px 6px;
+  border-image:var(--btn-img) 4 4 2 4 fill / 12px 12px 6px 12px / 0 stretch;
+  background:var(--btn);background-clip:padding-box;image-rendering:pixelated;
+}
+.fase:hover{border-image-source:var(--btn-on);background:var(--tan);color:var(--tinta)}
+.fase:active{transform:translateY(2px)}
+.fase .num{font-size:.66rem;font-weight:700;letter-spacing:.16em;color:var(--ouro)}
+.fase:hover .num{color:var(--ouro-esc)}
+.fase .nome{font-size:.94rem;font-weight:700;line-height:1.2}
+.fase .rec{font-size:.68rem;color:var(--tan-medio)}
+.fase:hover .rec{color:#7a6046}
+.fase.travada{
+  border-image:none;border:3px solid var(--escuro);background:#2a2637;
+  color:#5e5670;cursor:not-allowed;transform:none;padding:14px 13px;
+}
+.fase.travada .num,.fase.travada .rec{color:#4d4660}
+.fase.feita .num::after{content:" \2713";color:var(--verde-claro)}
+.menu-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.menu-topo .sub{margin:0}
+
+/* ---------- estrelas ---------- */
+.estrelas{display:flex;gap:6px;line-height:0}
+.estrelas i{
+  display:block;width:42px;height:36px;
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAABXUlEQVR42nWSMWtiQRSFv1ks5vLgFdNY+MROyQO1i42IhaRaLdP4P7KQHxDI/g+bLeOyRUhhazoVbKwES51CeLyBV0yKkMma6MBtzj2HOffcCxfe6Oetbzc7/lK/dA68GYx8vV4niiIAv1jN1VfOj3OiJEkAMMZQq9U497O6GYx8lmUBaDQaiAhxHHM8HrHWkmUZzjk+eFEUvVvt9XqXRsEYQ6VSOcGWyyWlwfWVmkz/+TRNMcYAEMfxCTHPcwCstazXa8bDvlIAv+9/MZnOfJqmiAjlcpmiKIIgz3P2+z3b7ZbxsK/uHh7fw7l7eGQ87KvD4QBAURTfLDvngugk1cl05rXWwS6AiITSWjOZzvy3PXa7XUQkWNtsNgC0Wi1EhGq1CsBiNf8UtpsdLyJYawHY7XYMrq8UwMvr0idJEsTtZscvVnNV+j9irTVPf/8ogOeXp7DrjxN0zoUx3gBJDYKS5DhuugAAAABJRU5ErkJggg==) no-repeat center/contain;
+  image-rendering:pixelated;
+}
+.estrelas i.ganha{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAABbElEQVR42pWSMUhCURiFvyuig2SiQYNRlkGEQ2AQJsETIWhQeINLBEJbY1MQ7UXQEDS0GYTgUINgRBCEQkkQBQYiDoVBOvkijKBabsPLW5INnelyON/Pf8+98Iful10yHNYl/1EuqUlZX5PGzuCfsKUbpCWaADg0L+mpPN1gay6pyZOWRxlaoorN5wTXEBjQ63eSJk959Ds35zQQuaQmY7sLXVd+v9sDwO6JdvhHq+dYKwMhsTF7LHPzNzg0rxn0L3YOMM4AeC3UiWeC6JGQsKysb6JHxkQ8E+S1UOej1jLTzw8K/Ki1aKQqX9CYWFnfNMtpw8Wr4V9QW+WnCQV1tJrNV2XAXaJnUldhuyeK3RPF5nMScJfI5quqXdE+vN1Oy3YJ78YZp1s2AGIbM8prpCqMbD8LBYbDurw4CPBynQWgcNhHZSAkAMYfL6WWaJpPBESX+ikWs8L6s+KAu64mQuF7q33zC5afJtQ1PgEFxIoRee4glQAAAABJRU5ErkJggg==);animation:brota .45s steps(4) both}
+.estrelas i.ganha:nth-child(2){animation-delay:.22s}
+.estrelas i.ganha:nth-child(3){animation-delay:.44s}
+@keyframes brota{from{transform:scale(.3) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
+.fim-estrelas{display:flex;justify-content:center;margin:2px 0 16px;max-width:560px}
+.fim-estrelas i{width:56px;height:48px}
+.criterios{display:grid;gap:7px;margin:0 0 4px;font-size:.82rem;font-weight:700}
+.criterios div{
+  display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  padding:8px 12px;background:#0e1017;color:var(--tan-medio);
+  box-shadow:0 0 0 3px var(--escuro);
+}
+.criterios b{font-variant-numeric:tabular-nums}
+.criterios .bate{color:var(--verde-claro)}
+.criterios .falha{color:#e88b8b}
+.fase .estrelas i{width:20px;height:17px}
+.fase .rec{display:flex;align-items:center;gap:7px;flex-wrap:wrap;row-gap:1px}
+.fase .rec .estrelas{flex:0 0 auto}
+
+/* ---------- capítulos ---------- */
+.fases{display:block}
+.fases-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+h2.cap{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  margin:22px 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ouro);
+}
+h2.cap:first-child{margin-top:2px}
+h2.cap span{font-size:.72rem;letter-spacing:.04em;color:var(--tan-medio);font-variant-numeric:tabular-nums}
+h2.cap.selada span{color:#7d6f92}
+.zona-selada{
+  border:3px solid var(--escuro);background:#242032;color:#6b6280;
+  padding:16px 18px;font-size:.86rem;font-weight:700;
+}
+
+/* ---------- casa e loja ---------- */
+.carteira{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.carteira div{
+  flex:1 1 130px;background:#0e1017;box-shadow:0 0 0 3px var(--escuro);
+  padding:10px 13px;
+}
+.carteira b{display:block;font-size:1.15rem;color:var(--tan-claro);font-variant-numeric:tabular-nums}
+.carteira span{font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--tan-medio)}
+.carteira .moeda b{color:var(--ouro)}
+.carteira .renda b{color:var(--verde-claro)}
+
+.terreno{
+  background:#0e1017;box-shadow:0 0 0 3px var(--escuro);
+  padding:10px;margin-bottom:18px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  image-rendering:pixelated;
+}
+.terreno img{image-rendering:pixelated;display:block}
+.terreno .casa-img{max-width:100%;height:auto}
+/* o quarto: a mobília comprada aparece no lugar dela, como se a pessoa
+   estivesse montando o cômodo */
+.quarto{width:100%;height:auto;display:block;image-rendering:pixelated}
+.quarto text{
+  font-family:inherit;font-size:7px;font-weight:700;fill:var(--ouro);
+  paint-order:stroke;stroke:#0e1017;stroke-width:2.5px;stroke-linejoin:round;
+}
+.terreno .vazio{color:var(--tan-medio);font-size:.78rem;font-weight:700}
+.recorde-linha{margin:10px 0 0;font-size:.8rem;color:var(--tan-medio)}
+.recorde-linha b{color:var(--tan-claro)}
+.recorde-linha .estrelas{vertical-align:-2px;margin-right:5px}
+
+.loja{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
+.item{
+  display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;
+  background:var(--btn);box-shadow:0 0 0 3px var(--escuro);padding:10px 12px;
+}
+.item .arte{width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.item .arte img{max-width:52px;max-height:52px;image-rendering:pixelated}
+.item .nome{font-size:.86rem;font-weight:700;color:var(--tan-claro);text-transform:capitalize}
+.item .renda{font-size:.68rem;color:var(--verde-claro);font-variant-numeric:tabular-nums}
+.item .tenho{font-size:.66rem;color:var(--tan-medio)}
+.item button{
+  grid-column:1/-1;margin-top:2px;padding:6px 10px;font:700 .78rem inherit;cursor:pointer;
+  color:#20170a;background:linear-gradient(180deg,#f7c65f,#e9a52c);border:0;
+}
+.item button:disabled{background:#4b4152;color:#847a95;cursor:not-allowed}
+.item.casa-atual{box-shadow:0 0 0 3px var(--verde-claro)}
+
+/* ---------- menu de fases ---------- */
+.fases{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px;margin-top:4px}
+.fase{
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:5px 13px 8px;text-align:left;font:inherit;color:var(--tan-claro);cursor:pointer;
+  border-style:solid;border-width:12px 12px 6px;
+  border-image:var(--btn-img) 4 4 2 4 fill / 12px 12px 6px 12px / 0 stretch;
+  background:var(--btn);background-clip:padding-box;image-rendering:pixelated;
+}
+.fase:hover{border-image-source:var(--btn-on);background:var(--tan);color:var(--tinta)}
+.fase:active{transform:translateY(2px)}
+.fase .num{font-size:.66rem;font-weight:700;letter-spacing:.16em;color:var(--ouro)}
+.fase:hover .num{color:var(--ouro-esc)}
+.fase .nome{font-size:.94rem;font-weight:700;line-height:1.2}
+.fase .rec{font-size:.68rem;color:var(--tan-medio)}
+.fase:hover .rec{color:#7a6046}
+.fase.travada{
+  border-image:none;border:3px solid var(--escuro);background:#2a2637;
+  color:#5e5670;cursor:not-allowed;transform:none;padding:14px 13px;
+}
+.fase.travada .num,.fase.travada .rec{color:#4d4660}
+.fase.feita .num::after{content:" \2713";color:var(--verde-claro)}
+.menu-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.menu-topo .sub{margin:0}
+
+/* ---------- estrelas ---------- */
+.estrelas{display:flex;gap:6px;line-height:0}
+.estrelas i{
+  display:block;width:42px;height:36px;
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAABXUlEQVR42nWSMWtiQRSFv1ks5vLgFdNY+MROyQO1i42IhaRaLdP4P7KQHxDI/g+bLeOyRUhhazoVbKwES51CeLyBV0yKkMma6MBtzj2HOffcCxfe6Oetbzc7/lK/dA68GYx8vV4niiIAv1jN1VfOj3OiJEkAMMZQq9U497O6GYx8lmUBaDQaiAhxHHM8HrHWkmUZzjk+eFEUvVvt9XqXRsEYQ6VSOcGWyyWlwfWVmkz/+TRNMcYAEMfxCTHPcwCstazXa8bDvlIAv+9/MZnOfJqmiAjlcpmiKIIgz3P2+z3b7ZbxsK/uHh7fw7l7eGQ87KvD4QBAURTfLDvngugk1cl05rXWwS6AiITSWjOZzvy3PXa7XUQkWNtsNgC0Wi1EhGq1CsBiNf8UtpsdLyJYawHY7XYMrq8UwMvr0idJEsTtZscvVnNV+j9irTVPf/8ogOeXp7DrjxN0zoUx3gBJDYKS5DhuugAAAABJRU5ErkJggg==) no-repeat center/contain;
+  image-rendering:pixelated;
+}
+.estrelas i.ganha{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAABbElEQVR42pWSMUhCURiFvyuig2SiQYNRlkGEQ2AQJsETIWhQeINLBEJbY1MQ7UXQEDS0GYTgUINgRBCEQkkQBQYiDoVBOvkijKBabsPLW5INnelyON/Pf8+98Iful10yHNYl/1EuqUlZX5PGzuCfsKUbpCWaADg0L+mpPN1gay6pyZOWRxlaoorN5wTXEBjQ63eSJk959Ds35zQQuaQmY7sLXVd+v9sDwO6JdvhHq+dYKwMhsTF7LHPzNzg0rxn0L3YOMM4AeC3UiWeC6JGQsKysb6JHxkQ8E+S1UOej1jLTzw8K/Ki1aKQqX9CYWFnfNMtpw8Wr4V9QW+WnCQV1tJrNV2XAXaJnUldhuyeK3RPF5nMScJfI5quqXdE+vN1Oy3YJ78YZp1s2AGIbM8prpCqMbD8LBYbDurw4CPBynQWgcNhHZSAkAMYfL6WWaJpPBESX+ikWs8L6s+KAu64mQuF7q33zC5afJtQ1PgEFxIoRee4glQAAAABJRU5ErkJggg==);animation:brota .45s steps(4) both}
+.estrelas i.ganha:nth-child(2){animation-delay:.22s}
+.estrelas i.ganha:nth-child(3){animation-delay:.44s}
+@keyframes brota{from{transform:scale(.3) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
+.fim-estrelas{display:flex;justify-content:center;margin:2px 0 16px;max-width:560px}
+.fim-estrelas i{width:56px;height:48px}
+.criterios{display:grid;gap:7px;margin:0 0 4px;font-size:.82rem;font-weight:700}
+.criterios div{
+  display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  padding:8px 12px;background:#0e1017;color:var(--tan-medio);
+  box-shadow:0 0 0 3px var(--escuro);
+}
+.criterios b{font-variant-numeric:tabular-nums}
+.criterios .bate{color:var(--verde-claro)}
+.criterios .falha{color:#e88b8b}
+.fase .estrelas i{width:20px;height:17px}
+.fase .rec{display:flex;align-items:center;gap:7px;flex-wrap:wrap;row-gap:1px}
+.fase .rec .estrelas{flex:0 0 auto}
+
+/* ---------- capítulos ---------- */
+.fases{display:block}
+.fases-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+h2.cap{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  margin:22px 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ouro);
+}
+h2.cap:first-child{margin-top:2px}
+h2.cap span{font-size:.72rem;letter-spacing:.04em;color:var(--tan-medio);font-variant-numeric:tabular-nums}
+h2.cap.selada span{color:#7d6f92}
+.zona-selada{
+  border:3px solid var(--escuro);background:#242032;color:#6b6280;
+  padding:16px 18px;font-size:.86rem;font-weight:700;
+}
+
+/* ---------- casa e loja ---------- */
+.carteira{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.carteira div{
+  flex:1 1 130px;background:#0e1017;box-shadow:0 0 0 3px var(--escuro);
+  padding:10px 13px;
+}
+.carteira b{display:block;font-size:1.15rem;color:var(--tan-claro);font-variant-numeric:tabular-nums}
+.carteira span{font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--tan-medio)}
+.carteira .moeda b{color:var(--ouro)}
+.carteira .renda b{color:var(--verde-claro)}
+
+.terreno{
+  background:#0e1017;box-shadow:0 0 0 3px var(--escuro);
+  padding:10px;margin-bottom:18px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  image-rendering:pixelated;
+}
+.terreno img{image-rendering:pixelated;display:block}
+.terreno .casa-img{max-width:100%;height:auto}
+/* o quarto: a mobília comprada aparece no lugar dela, como se a pessoa
+   estivesse montando o cômodo */
+.quarto{width:100%;height:auto;display:block;image-rendering:pixelated}
+.quarto text{
+  font-family:inherit;font-size:7px;font-weight:700;fill:var(--ouro);
+  paint-order:stroke;stroke:#0e1017;stroke-width:2.5px;stroke-linejoin:round;
+}
+.terreno .vazio{color:var(--tan-medio);font-size:.78rem;font-weight:700}
+/* .estrelas é flex: dentro de um <p> viraria bloco e jogaria o texto para a
+   linha de baixo. A linha inteira vira flex para as estrelas ficarem ao lado. */
+.recorde-linha{
+  margin:12px 0 0;font-size:.8rem;color:var(--tan-medio);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.recorde-linha b{color:var(--tan-claro)}
+.recorde-linha .estrelas{gap:3px;flex:0 0 auto}
+.recorde-linha .estrelas i{width:16px;height:14px}
+
+.loja{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
+.item{
+  display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;
+  background:var(--btn);box-shadow:0 0 0 3px var(--escuro);padding:10px 12px;
+}
+.item .arte{width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.item .arte img{max-width:52px;max-height:52px;image-rendering:pixelated}
+.item .nome{font-size:.86rem;font-weight:700;color:var(--tan-claro);text-transform:capitalize}
+.item .renda{font-size:.68rem;color:var(--verde-claro);font-variant-numeric:tabular-nums}
+.item .tenho{font-size:.66rem;color:var(--tan-medio)}
+.item button{
+  grid-column:1/-1;margin-top:2px;padding:6px 10px;font:700 .78rem inherit;cursor:pointer;
+  color:#20170a;background:linear-gradient(180deg,#f7c65f,#e9a52c);border:0;
+}
+.item button:disabled{background:#4b4152;color:#847a95;cursor:not-allowed}
+.item.casa-atual{box-shadow:0 0 0 3px var(--verde-claro)}
+
+/* ---------- menu de fases ---------- */
+.fases{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px;margin-top:4px}
+.fase{
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:5px 13px 8px;text-align:left;font:inherit;color:var(--tan-claro);cursor:pointer;
+  border-style:solid;border-width:12px 12px 6px;
+  border-image:var(--btn-img) 4 4 2 4 fill / 12px 12px 6px 12px / 0 stretch;
+  background:var(--btn);background-clip:padding-box;image-rendering:pixelated;
+}
+.fase:hover{border-image-source:var(--btn-on);background:var(--tan);color:var(--tinta)}
+.fase:active{transform:translateY(2px)}
+.fase .num{font-size:.66rem;font-weight:700;letter-spacing:.16em;color:var(--ouro)}
+.fase:hover .num{color:var(--ouro-esc)}
+.fase .nome{font-size:.94rem;font-weight:700;line-height:1.2}
+.fase .rec{font-size:.68rem;color:var(--tan-medio)}
+.fase:hover .rec{color:#7a6046}
+.fase.travada{
+  border-image:none;border:3px solid var(--escuro);background:#2a2637;
+  color:#5e5670;cursor:not-allowed;transform:none;padding:14px 13px;
+}
+.fase.travada .num,.fase.travada .rec{color:#4d4660}
+.fase.feita .num::after{content:" \2713";color:var(--verde-claro)}
+.menu-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.menu-topo .sub{margin:0}
+
+/* ---------- estrelas ---------- */
+.estrelas{display:flex;gap:6px;line-height:0}
+.estrelas i{
+  display:block;width:42px;height:36px;
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAABXUlEQVR42nWSMWtiQRSFv1ks5vLgFdNY+MROyQO1i42IhaRaLdP4P7KQHxDI/g+bLeOyRUhhazoVbKwES51CeLyBV0yKkMma6MBtzj2HOffcCxfe6Oetbzc7/lK/dA68GYx8vV4niiIAv1jN1VfOj3OiJEkAMMZQq9U497O6GYx8lmUBaDQaiAhxHHM8HrHWkmUZzjk+eFEUvVvt9XqXRsEYQ6VSOcGWyyWlwfWVmkz/+TRNMcYAEMfxCTHPcwCstazXa8bDvlIAv+9/MZnOfJqmiAjlcpmiKIIgz3P2+z3b7ZbxsK/uHh7fw7l7eGQ87KvD4QBAURTfLDvngugk1cl05rXWwS6AiITSWjOZzvy3PXa7XUQkWNtsNgC0Wi1EhGq1CsBiNf8UtpsdLyJYawHY7XYMrq8UwMvr0idJEsTtZscvVnNV+j9irTVPf/8ogOeXp7DrjxN0zoUx3gBJDYKS5DhuugAAAABJRU5ErkJggg==) no-repeat center/contain;
+  image-rendering:pixelated;
+}
+.estrelas i.ganha{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAABbElEQVR42pWSMUhCURiFvyuig2SiQYNRlkGEQ2AQJsETIWhQeINLBEJbY1MQ7UXQEDS0GYTgUINgRBCEQkkQBQYiDoVBOvkijKBabsPLW5INnelyON/Pf8+98Iful10yHNYl/1EuqUlZX5PGzuCfsKUbpCWaADg0L+mpPN1gay6pyZOWRxlaoorN5wTXEBjQ63eSJk959Ds35zQQuaQmY7sLXVd+v9sDwO6JdvhHq+dYKwMhsTF7LHPzNzg0rxn0L3YOMM4AeC3UiWeC6JGQsKysb6JHxkQ8E+S1UOej1jLTzw8K/Ki1aKQqX9CYWFnfNMtpw8Wr4V9QW+WnCQV1tJrNV2XAXaJnUldhuyeK3RPF5nMScJfI5quqXdE+vN1Oy3YJ78YZp1s2AGIbM8prpCqMbD8LBYbDurw4CPBynQWgcNhHZSAkAMYfL6WWaJpPBESX+ikWs8L6s+KAu64mQuF7q33zC5afJtQ1PgEFxIoRee4glQAAAABJRU5ErkJggg==);animation:brota .45s steps(4) both}
+.estrelas i.ganha:nth-child(2){animation-delay:.22s}
+.estrelas i.ganha:nth-child(3){animation-delay:.44s}
+@keyframes brota{from{transform:scale(.3) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
+.fim-estrelas{display:flex;justify-content:center;margin:2px 0 16px;max-width:560px}
+.fim-estrelas i{width:56px;height:48px}
+.criterios{display:grid;gap:7px;margin:0 0 4px;font-size:.82rem;font-weight:700}
+.criterios div{
+  display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  padding:8px 12px;background:#0e1017;color:var(--tan-medio);
+  box-shadow:0 0 0 3px var(--escuro);
+}
+.criterios b{font-variant-numeric:tabular-nums}
+.criterios .bate{color:var(--verde-claro)}
+.criterios .falha{color:#e88b8b}
+.fase .estrelas i{width:20px;height:17px}
+.fase .rec{display:flex;align-items:center;gap:7px;flex-wrap:wrap;row-gap:1px}
+.fase .rec .estrelas{flex:0 0 auto}
+
+/* ---------- capítulos ---------- */
+.fases{display:block}
+.fases-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+h2.cap{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  margin:22px 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ouro);
+}
+h2.cap:first-child{margin-top:2px}
+h2.cap span{font-size:.72rem;letter-spacing:.04em;color:var(--tan-medio);font-variant-numeric:tabular-nums}
+h2.cap.selada span{color:#7d6f92}
+.zona-selada{
+  border:3px solid var(--escuro);background:#242032;color:#6b6280;
+  padding:16px 18px;font-size:.86rem;font-weight:700;
+}
+
+/* ---------- casa e loja ---------- */
+.carteira{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.carteira div{
+  flex:1 1 130px;background:#0e1017;box-shadow:0 0 0 3px var(--escuro);
+  padding:10px 13px;
+}
+.carteira b{display:block;font-size:1.15rem;color:var(--tan-claro);font-variant-numeric:tabular-nums}
+.carteira span{font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--tan-medio)}
+.carteira .moeda b{color:var(--ouro)}
+.carteira .renda b{color:var(--verde-claro)}
+
+.terreno{
+  background:#0e1017;box-shadow:0 0 0 3px var(--escuro);
+  padding:10px;margin-bottom:18px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  image-rendering:pixelated;
+}
+.terreno img{image-rendering:pixelated;display:block}
+.terreno .casa-img{max-width:100%;height:auto}
+/* o quarto: a mobília comprada aparece no lugar dela, como se a pessoa
+   estivesse montando o cômodo */
+.quarto{width:100%;height:auto;display:block;image-rendering:pixelated}
+.quarto text{
+  font-family:inherit;font-size:7px;font-weight:700;fill:var(--ouro);
+  paint-order:stroke;stroke:#0e1017;stroke-width:2.5px;stroke-linejoin:round;
+}
+.terreno .vazio{color:var(--tan-medio);font-size:.78rem;font-weight:700}
+/* .estrelas é flex: dentro de um <p> viraria bloco e jogaria o texto para a
+   linha de baixo. A linha inteira vira flex para as estrelas ficarem ao lado. */
+.recorde-linha{
+  margin:12px 0 0;font-size:.8rem;color:var(--tan-medio);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.recorde-linha b{color:var(--tan-claro)}
+.recorde-linha .estrelas{gap:3px;flex:0 0 auto}
+.recorde-linha .estrelas i{width:16px;height:14px}
+
+.loja{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
+.item{
+  display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;
+  background:var(--btn);box-shadow:0 0 0 3px var(--escuro);padding:10px 12px;
+}
+.item .arte{width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.item .arte img{max-width:52px;max-height:52px;image-rendering:pixelated}
+.item .nome{font-size:.86rem;font-weight:700;color:var(--tan-claro);text-transform:capitalize}
+.item .renda{font-size:.68rem;color:var(--verde-claro);font-variant-numeric:tabular-nums}
+.item .tenho{font-size:.66rem;color:var(--tan-medio)}
+.item button{
+  grid-column:1/-1;margin-top:2px;padding:6px 10px;font:700 .78rem inherit;cursor:pointer;
+  color:#20170a;background:linear-gradient(180deg,#f7c65f,#e9a52c);border:0;
+}
+.item button:disabled{background:#4b4152;color:#847a95;cursor:not-allowed}
+.item.casa-atual{box-shadow:0 0 0 3px var(--verde-claro)}
 </style>
 </head>
 <body>
@@ -1592,10 +1949,12 @@ h2.cap.selada span{color:#7d6f92}
     <div class="painel">
       <p id="fim-texto"></p>
       <div class="criterios" id="criterios"></div>
+      <p class="recorde-linha" id="fim-recorde"></p>
       <div class="placar">
         <div><strong id="fim-pontos">0</strong><span>points</span></div>
         <div><strong id="fim-tempo">00:00</strong><span>time</span></div>
         <div><strong id="fim-erros">0</strong><span>wrong clicks</span></div>
+        <div><strong id="fim-premio">0</strong><span>coins earned</span></div>
       </div>
       <div class="linha">
         <button class="btn sm" id="btn-proxima">Next stage</button>
@@ -2234,6 +2593,14 @@ function terminar(){
   const melhor = !r || est > r.estrelas ||
                  (est === r.estrelas && (pts > r.pontos || (pts === r.pontos && total < r.tempo)));
   if(melhor) progresso.recordes[fase] = { pontos:pts, tempo:total, estrelas:est };
+  /* A estrela é recorde: só sobe quando a pessoa bate a própria marca, senão
+     repetir a fase 1 daria estrela sem fim e o número perderia o sentido. Mas
+     terminar uma partida sempre paga moeda, proporcional ao que foi feito e ao
+     tamanho do capítulo, para repetir nunca ser à toa. Cresce devagar de
+     propósito: no fim do jogo a renda passiva é milhares por segundo, e o
+     prêmio vira troco — quem repete é porque quer, não porque precisa. */
+  const premio = Math.round(pts / 10 * est * (1 + fase / 10));
+  banco.moedas += premio;
   guardar();
 
   const irmas = fasesDaZona(FASES[fase].c);
@@ -2259,6 +2626,17 @@ function terminar(){
   $("#fim-pontos").textContent = pts;
   $("#fim-tempo").textContent = mmss(total);
   $("#fim-erros").textContent = erros;
+  $("#fim-premio").textContent = numero(premio);
+  /* O recorde aparece sempre. Antes, repetir a fase sem bater a marca não
+     dizia nada na tela, e parecia que a estrela não tinha contado. */
+  const rec = progresso.recordes[fase];
+  $("#fim-recorde").innerHTML =
+    '<span class="estrelas">' + estrelasHTML(melhor ? est : rec.estrelas) + '</span><span>' +
+    (melhor ? '<b>New record.</b>'
+            : 'Your best here: <b>' + rec.pontos + ' pts in ' + mmss(rec.tempo) + '</b>' +
+              (rec.estrelas < 3 ? ' — beat it for the ' +
+                                  (rec.estrelas === 1 ? 'second' : 'third') + ' star.' : '.')) +
+    '</span>';
   $("#btn-proxima").hidden = fimDaZona;
   if(fimDaZona && !ultima) $("#fim-texto").textContent =
     ZONAS[ZONAS.indexOf(FASES[fase].c) + 1] + " is open now.";
